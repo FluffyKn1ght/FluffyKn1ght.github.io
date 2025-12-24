@@ -20,9 +20,11 @@ function doTimer() {
   let timer = document.getElementById("timer");
 
   if (timer) {
+    timer.animate([
+      {filter: "blur(1px)", color: "#00cfff", fontSize: "50px"},
+      {filter: "none", color: "white", fontSize: "48px"}
+    ], {duration: 1000})
     timer.textContent = getTimeLeft()
-    document.getElementById("timer").setAttribute("class", "")
-    document.getElementById("timer").setAttribute("class", "tick")
   }
 }
 
@@ -55,7 +57,7 @@ document.onreadystatechange = function(e) {
     loaded = true
 
     doTimer()
-    var x = setInterval(doTimer, 1000)
+    setInterval(doTimer, 1000)
 
     let timer = document.getElementById("timer")
     if (timer) {
