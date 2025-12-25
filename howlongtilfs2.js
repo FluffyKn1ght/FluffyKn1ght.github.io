@@ -1,35 +1,64 @@
 let loaded = false
 let playingBgm = false
+let prevSeconds = 0
 
-const TARGET_TIME = new Date(new Date("Dec 27, 2025 00:00:00").toLocaleString("en-US", {timeZone: "Etc/GMT"})).getTime()
+let TARGET_TIME = new Date(new Date("Dec 27, 2025 00:00:00").toLocaleString("en-US", {timeZone: "Etc/GMT"})).getTime()
 
-function getTimeLeft() {
-    var now = new Date().getTime()
+function getSecondsLeft() {
+  return Math.floor((TARGET_TIME - new Date().getTime()) / 1000);
+}
 
-    var dist = TARGET_TIME - now
-    if (dist > 0) {
+function formatTime(time) {
+    if (time > 0) {
 
-      var d = Math.floor(dist / (1000 * 60 * 60 * 24))
-      var h = Math.floor(dist % (1000 * 60 * 60 * 24) / (1000 * 60 * 60))
-      var m = Math.floor(dist % (1000 * 60 * 60) / (1000 * 60))
-      var s = Math.floor(dist % (1000 * 60) / 1000)
+      var d = Math.floor(time / (60 * 60 * 24))
+      var h = Math.floor(time % (60 * 60 * 24) / (60 * 60))
+      var m = Math.floor(time % (60 * 60) / 60)
+      var s = Math.floor(time % (60))
 
       return `${d} days, ${h}h ${m}m ${s}s`
     } else {
-      return "S O O N"
+      return "BETA TESTING HAS BEGUN"
     }
 }
 
 function doTimer() {
+  let seconds = getSecondsLeft();
+  if (seconds == prevSeconds) return;
+  prevSeconds = seconds
+  
   let timer = document.getElementById("timer");
-
+  let audio = document.getElementById("bgm");
+  
   if (timer) {
     timer.animate([
       {filter: "blur(1px)", color: "#00cfff", fontSize: "50px"},
       {filter: "none", color: "white", fontSize: "48px"}
     ], {duration: 1000})
-    timer.textContent = getTimeLeft()
+    timer.textContent = formatTime(seconds)
   }
+  if (audio && seconds > 0) {
+    if (seconds == 58) {
+      console.log("YOUTUBE OUTRO")
+      audio.src = "xenogenesis.mp3"
+      audio.play()
+      xenogenesisState = 2;
+    }
+    if (seconds == 63) {
+      console.log("bgm fadeout")
+      let volume = 1
+      let volumeChanger = setInterval(function() {
+        volume -= 0.01 / 5
+        if (volume < 0) volume = 0;
+        audio.volume = volume
+        if (volume == 0) {
+          audio.volume = 1
+          clearInterval(volumeChanger)
+        }
+      }, 10)
+    }
+  }
+  
 }
 
 function doIntro() {
@@ -61,7 +90,7 @@ document.onreadystatechange = function(e) {
     loaded = true
 
     doTimer()
-    setInterval(doTimer, 1000)
+    setInterval(doTimer, 10)
 
     let timer = document.getElementById("timer")
     if (timer) {
@@ -74,7 +103,7 @@ document.onreadystatechange = function(e) {
           }, 1000)
         }
 
-        let timeLeft = getTimeLeft()
+        let timeLeft = formatTime(getSecondsLeft())
         console.log(`Copied time: ${timeLeft}`)
         navigator.clipboard.writeText(timeLeft)
       }
