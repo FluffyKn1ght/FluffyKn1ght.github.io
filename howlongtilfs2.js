@@ -2,7 +2,7 @@ let loaded = false
 let playingBgm = false
 let prevSeconds = 0
 
-let TARGET_TIME = new Date(new Date("Dec 27, 2025 00:00:00").toLocaleString("en-US", {timeZone: "Etc/GMT"})).getTime()
+let TARGET_TIME = new Date(new Date("Dec 28, 2025 12:00:00").toLocaleString("en-US", {timeZone: "Etc/GMT"})).getTime()
 
 function getSecondsLeft() {
   return Math.floor((TARGET_TIME - new Date(new Date().toLocaleString("en-US", {timeZone: "Etc/GMT"})).getTime()) / 1000);
