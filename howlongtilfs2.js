@@ -18,7 +18,7 @@ function formatTime(time) {
 
       return `${d} days, ${h}h ${m}m ${s}s`
     } else {
-      return "BETA TESTING HAS BEGUN"
+      return "-= COMING SOON =-"
     }
 }
 
@@ -26,10 +26,10 @@ function doTimer() {
   let seconds = getSecondsLeft();
   if (seconds == prevSeconds) return;
   prevSeconds = seconds
-  
+
   let timer = document.getElementById("timer");
   let audio = document.getElementById("bgm");
-  
+
   if (timer) {
     timer.animate([
       {filter: "blur(1px)", color: "#00cfff", fontSize: "50px"},
@@ -58,7 +58,7 @@ function doTimer() {
       }, 10)
     }
   }
-  
+
 }
 
 function doIntro() {
